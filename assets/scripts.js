@@ -106,20 +106,20 @@ window.onload = function () {
 		};
 	}
 
-	function Apple(position) {
-		this.position = this.position;
-		this.draw = function () {
-			context.save();
-			context.fillStyle = '#33cc33';
-			context.beginPath();
-			var radius = blockSize / 2;
-			var x = position[0] * blockSize + radius;
-			var y = position[1] * blockSize + radius;
-			context.arc(x, y, radius, 0, Math.PI * 2, true);
-			context.fill();
-			context.restore();
-		};
-	}
+	// function Apple(position) {
+	// 	this.position = this.position;
+	// 	this.draw = function () {
+	// 		context.save();
+	// 		context.fillStyle = '#33cc33';
+	// 		context.beginPath();
+	// 		var radius = blockSize / 2;
+	// 		var x = position[0] * blockSize + radius;
+	// 		var y = position[1] * blockSize + radius;
+	// 		context.arc(x, y, radius, 0, Math.PI * 2, true);
+	// 		context.fill();
+	// 		context.restore();
+	// 	};
+	// }
 
 	document.onkeydown = function handleKeyDown(e) {
 		let key = e.keyCode;
