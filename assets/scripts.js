@@ -41,11 +41,15 @@ window.onload = function () {
 		snakee.advance();
 		if (snakee.checkCollision()) {
 			// GAME OVER
+		} else {
+			if (snakee.isEatingApple(applee)) {
+				// SNAKE EAT APPLE
+			}
+			context.clearRect(0, 0, canvasWidth, canvasHeigth);
+			snakee.draw();
+			applee.draw();
+			setTimeout(refreshCanvas, delay);
 		}
-		context.clearRect(0, 0, canvasWidth, canvasHeigth);
-		snakee.draw();
-		applee.draw();
-		setTimeout(refreshCanvas, delay);
 	}
 
 	function drawBlock(ctx, position) {
@@ -131,6 +135,17 @@ window.onload = function () {
 				}
 			}
 			return snakeCollision || wallCollision;
+		};
+		this.isEatingApple = function (appleToEat) {
+			let head = this.body[0];
+			if (
+				head[0] === appleToEat.position[0] &&
+				head[1] === appleToEat.position[1]
+			) {
+				return true;
+			} else {
+				return false;
+			}
 		};
 	}
 
