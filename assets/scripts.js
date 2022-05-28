@@ -3,11 +3,11 @@ window.onload = function () {
 	var canvasHeigth = 600;
 	var context;
 	var delay = 100;
-	var xCoord = 0;
-	var yCoord = 0;
 	var blockSize = 20;
 	var snakee;
 	var applee;
+	var widthInBlock = canvasWidth / blockSize;
+	var heightInBlock = canvasHeigth / blockSize;
 
 	init();
 
@@ -38,8 +38,11 @@ window.onload = function () {
 
 	function refreshCanvas() {
 		//dessiner dans le canvas avec le context
-		context.clearRect(0, 0, canvasWidth, canvasHeigth);
 		snakee.advance();
+		if (snakee.checkCollision()) {
+			// GAME OVER
+		}
+		context.clearRect(0, 0, canvasWidth, canvasHeigth);
 		snakee.draw();
 		applee.draw();
 		setTimeout(refreshCanvas, delay);
@@ -103,6 +106,31 @@ window.onload = function () {
 			if (allowedDirections.indexOf(newDirection) > -1) {
 				this.direction = newDirection;
 			}
+		};
+
+		this.checkCollision = function () {
+			let wallCollision = false;
+			let snakeCollision = false;
+			let head = this.body[0];
+			let rest = this.body.slice(1);
+			let snakeX = head[0];
+			let snakeY = head[1];
+			let minX = 0;
+			let minY = 0;
+			let maxX = widthInBlock - 1;
+			let maxY = heightInBlock - 1;
+			let isNotBetweenHorizontalWalls = snakeX < minX || snakeX > maxX;
+			let isNotBetweenVerticalWalls = snakeY < minY || snakeY > maxY;
+
+			if (isNotBetweenHorizontalWalls || isNotBetweenVerticalWalls) {
+				wallCollision = true;
+			}
+			for (let i in rest) {
+				if (snakeX === rest[i][0] && snakeY === rest[i][1]) {
+					snakeCollision = true;
+				}
+			}
+			return snakeCollision || wallCollision;
 		};
 	}
 
