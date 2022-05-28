@@ -1,6 +1,6 @@
 window.onload = function () {
 	var canvasWidth = 900;
-	var canvasHeigth = 600;
+	var canvasHeigth = 500;
 	var context;
 	var delay = 100;
 	var blockSize = 20;
@@ -40,9 +40,11 @@ window.onload = function () {
 		snakee.advance();
 		if (snakee.checkCollision()) {
 			// GAME OVER
+			gameOver();
 		} else {
 			if (snakee.isEatingApple(applee)) {
 				// SNAKE EAT APPLE
+				snakee.ateApple = true;
 				do {
 					applee.setNewPosition();
 					//we'll set a new position while the new position of apple is on snake
@@ -53,6 +55,8 @@ window.onload = function () {
 			applee.draw();
 			setTimeout(refreshCanvas, delay);
 		}
+		//for debug
+		console.log(applee, snakee);
 	}
 
 	function drawBlock(ctx, position) {
@@ -61,9 +65,19 @@ window.onload = function () {
 		context.fillRect(x, y, blockSize, blockSize);
 	}
 
+	function gameOver() {
+		context.save();
+		context.fillText('Game over', 5, 15);
+		context.fillText('Appuyer sur la touche espace pour jouer', 5, 30);
+		context.restore();
+	}
+
+	
+
 	function Snake(body, direction) {
 		this.body = body;
 		this.direction = direction;
+		this.ateApple = false;
 		this.draw = function () {
 			context.save();
 			context.fillStyle = '#ff0000';
@@ -93,7 +107,11 @@ window.onload = function () {
 			}
 
 			this.body.unshift(nextPosition);
-			this.body.pop();
+			if (!this.ateApple) {
+				this.body.pop();
+			} else {
+				this.ateApple = false;
+			}
 		};
 		this.setDirection = function (newDirection) {
 			let allowedDirections;
@@ -141,7 +159,6 @@ window.onload = function () {
 		};
 		this.isEatingApple = function (appleToEat) {
 			let head = this.body[0];
-			console.log(head, appleToEat);
 			if (
 				head[0] === appleToEat.position[0] &&
 				head[1] === appleToEat.position[1]
@@ -201,7 +218,9 @@ window.onload = function () {
 			case 40:
 				newDirection = 'down';
 				break;
-
+			case 32:
+				restart();
+				return;
 			default:
 				return;
 		}
