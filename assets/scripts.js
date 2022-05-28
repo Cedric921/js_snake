@@ -9,8 +9,6 @@ window.onload = function () {
 	var widthInBlock = canvasWidth / blockSize;
 	var heightInBlock = canvasHeigth / blockSize;
 
-	init();
-
 	//la fonction a l'initial
 	function init() {
 		//creation d'un canvas
@@ -35,6 +33,7 @@ window.onload = function () {
 
 		refreshCanvas();
 	}
+	init();
 
 	function refreshCanvas() {
 		//dessiner dans le canvas avec le context
@@ -44,6 +43,7 @@ window.onload = function () {
 		} else {
 			if (snakee.isEatingApple(applee)) {
 				// SNAKE EAT APPLE
+				applee.setNewPosition();
 			}
 			context.clearRect(0, 0, canvasWidth, canvasHeigth);
 			snakee.draw();
@@ -138,6 +138,7 @@ window.onload = function () {
 		};
 		this.isEatingApple = function (appleToEat) {
 			let head = this.body[0];
+			console.log(head, appleToEat);
 			if (
 				head[0] === appleToEat.position[0] &&
 				head[1] === appleToEat.position[1]
@@ -150,17 +151,22 @@ window.onload = function () {
 	}
 
 	function Apple(position) {
-		this.position = this.position;
+		this.position = position;
 		this.draw = function () {
 			context.save();
 			context.fillStyle = '#33cc33';
 			context.beginPath();
-			var radius = blockSize / 2;
-			var x = position[0] * blockSize + radius;
-			var y = position[1] * blockSize + radius;
+			let radius = blockSize / 2;
+			let x = this.position[0] * blockSize + radius;
+			let y = this.position[1] * blockSize + radius;
 			context.arc(x, y, radius, 0, Math.PI * 2, true);
 			context.fill();
 			context.restore();
+		};
+		this.setNewPosition = function () {
+			let newX = Math.round(Math.random() * (widthInBlock - 1));
+			let newY = Math.round(Math.random() * (heightInBlock - 1));
+			this.position = [newX, newY];
 		};
 	}
 
