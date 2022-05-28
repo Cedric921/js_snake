@@ -1,24 +1,27 @@
 window.onload = function () {
-	var canvasWidth = 900;
+	var canvasWidth = 850;
 	var canvasHeigth = 500;
 	var context;
-	var delay = 100;
-	var blockSize = 20;
+	var delay = 150;
+	var blockSize = 10;
 	var snakee;
 	var applee;
 	var widthInBlock = canvasWidth / blockSize;
 	var heightInBlock = canvasHeigth / blockSize;
+	var score;
 
 	//la fonction a l'initial
 	function init() {
 		//creation d'un canvas
 		var canvas = document.createElement('canvas');
+		var page = document.getElementById('root');
 		canvas.width = canvasWidth;
 		canvas.height = canvasHeigth;
 		canvas.style.border = '1px solid grey';
-
-		document.body.appendChild(canvas);
+		canvas.className = "game";
+		page.appendChild(canvas);
 		context = canvas.getContext('2d');
+		score = 0;
 		//on cree le snake
 		snakee = new Snake(
 			[
@@ -44,6 +47,7 @@ window.onload = function () {
 		} else {
 			if (snakee.isEatingApple(applee)) {
 				// SNAKE EAT APPLE
+				score++;
 				snakee.ateApple = true;
 				do {
 					applee.setNewPosition();
@@ -53,6 +57,7 @@ window.onload = function () {
 			context.clearRect(0, 0, canvasWidth, canvasHeigth);
 			snakee.draw();
 			applee.draw();
+			drawScore();
 			setTimeout(refreshCanvas, delay);
 		}
 		//for debug
@@ -72,7 +77,27 @@ window.onload = function () {
 		context.restore();
 	}
 
-	
+	function drawScore() {
+		context.save();
+		context.fillText(score.toString(), 5, canvasHeigth - 5);
+		context.restore();
+	}
+
+	function restart() {
+		//on cree le snake
+		snakee = new Snake(
+			[
+				[6, 4],
+				[5, 4],
+				[4, 4],
+			],
+			'right'
+		);
+		
+		score = 0; 
+		applee = new Apple([10, 10]);
+		refreshCanvas();
+	}
 
 	function Snake(body, direction) {
 		this.body = body;
