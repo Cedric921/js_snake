@@ -43,7 +43,10 @@ window.onload = function () {
 		} else {
 			if (snakee.isEatingApple(applee)) {
 				// SNAKE EAT APPLE
-				applee.setNewPosition();
+				do {
+					applee.setNewPosition();
+					//we'll set a new position while the new position of apple is on snake
+				} while (applee.isOnSnake(snakee));
 			}
 			context.clearRect(0, 0, canvasWidth, canvasHeigth);
 			snakee.draw();
@@ -167,6 +170,18 @@ window.onload = function () {
 			let newX = Math.round(Math.random() * (widthInBlock - 1));
 			let newY = Math.round(Math.random() * (heightInBlock - 1));
 			this.position = [newX, newY];
+		};
+		this.isOnSnake = function (snakeToCheck) {
+			let isOnSnake = false;
+			for (let i in snakeToCheck.body) {
+				if (
+					this.position[0] === snakeToCheck.body[i][0] &&
+					this.position[1] === snakeToCheck.body[i][1]
+				) {
+					isOnSnake = true;
+				}
+				return isOnSnake;
+			}
 		};
 	}
 
